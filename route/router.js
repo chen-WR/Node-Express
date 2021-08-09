@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const pool = require('../db/db');
+const pool = require('../config/db.config');
 
 
 // GET all users
@@ -19,7 +19,7 @@ router.get('/:table',function(request, response){
 router.get('/:table/:id',function(request,response){
 	const table = request.params.table
 	const id = parseInt(request.params.id)
-	const query = `SELECT * FROM ${table} where id=${id}`
+	const query = `SELECT * FROM ${table} where user_id=${id}`
 	pool.query(query,(error,result)=>{
 		if (error){
 			throw error
@@ -31,8 +31,8 @@ router.get('/:table/:id',function(request,response){
 //POST Single user
 router.post('/:table',function(request,response){
 	const table = request.params.table
-	const {name, age} = request.body
-	const query = `INSERT INTO ${table} (name, age) VALUES (${name},${age})`
+	const {username, password, firstname, lastname, age, email} = request.body
+	const query = `INSERT INTO ${table} (username, password, firstname, lastname, age, email) VALUES ('${username}','${password}','${firstname}','${lastname}',${age},'${email}')`
 	pool.query(query,(error,result)=>{
 		if (error){
 			throw error
@@ -71,7 +71,7 @@ router.delete('/:table',function(request,response){
 router.delete('/:table/:id',function(request,response){
 	const table = request.params.table
 	const id = parseInt(request.params.id)
-	const query = `DELETE FROM users WHERE id=${id}`
+	const query = `DELETE FROM users WHERE user_id=${id}`
 	pool.query(query,(error,result)=>{
 		if (error) {
 			throw error
